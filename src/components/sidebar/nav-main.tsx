@@ -33,10 +33,10 @@ export function NavMain({ items }: NavMainProps) {
                 <SidebarMenuButton
                   isActive={pathname === item.href}
                   className="data-[active=true]:text-primary bg-transparent data-[active=true]:bg-transparent
-                                text-accent-foreground cursor-pointer py-[24px] font-light hover:bg-transparent hover:text-primary"
+                                text-accent-foreground cursor-pointer py-[18px] font-light hover:bg-transparent hover:text-primary"
                 >
                   <item.icon className="w-5 h-5" />
-                  <p className="text-sm font-light">{item.title}</p>
+                  <p className="text-[12px] font-normal">{item.title}</p>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </Link>
