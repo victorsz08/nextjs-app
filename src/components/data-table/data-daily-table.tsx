@@ -24,6 +24,7 @@ import { BadgeStatus } from "../badge/badge-status";
 import { CreateOrderForm } from "../forms/create-order-form";
 import { useState } from "react";
 import { Separator } from "../ui/separator";
+import { MenuOrder } from "../menu/menu-order";
 
 const data: DataOrderType[] = [
   {
@@ -143,13 +144,7 @@ export function DataDailyTable() {
                   <BadgeStatus status={order.status} />
                 </TableCell>
                 <TableCell className="w-[70px] text-center">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="cursor-pointer"
-                  >
-                    <EllipsisVerticalIcon />
-                  </Button>
+                  <MenuOrder order={order}/>
                 </TableCell>
               </TableRow>
             ))}
