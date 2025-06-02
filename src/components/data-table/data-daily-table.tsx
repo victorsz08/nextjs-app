@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { BadgeStatus } from "../badge/badge-status";
+import { CreateOrderForm } from "../forms/create-order-form";
 
 
 const data: DataOrderType[] = [
@@ -50,6 +51,9 @@ export function DataDailyTable() {
                 >Pedidos com agendamentos para hoje.</CardDescription>
             </CardHeader>
             <CardContent>
+                <div className="flex items-center justify-end mb-4">
+                    <CreateOrderForm/>
+                </div>
                 <Table>
                     <TableHeader>
                         <TableRow>

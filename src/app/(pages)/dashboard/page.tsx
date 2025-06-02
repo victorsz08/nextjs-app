@@ -62,7 +62,7 @@ export default function Dashboard() {
         <section className="p-[24px]">
             <section className="flex flex-col space-x-[18px] space-y-[18px]">
                 <p className="text-[20px] font-semibold text-accent-foreground">Dashboard</p>
-                <section className="flex flex-row gap-[18px]">
+                <section className="flex flex-row gap-[18px] w-full">
                     <Card className="w-full gap-5 shadow-none">
                     <CardHeader className="flex items-center justify-between">
                         <CardDescription className="text-accent-foreground font-light">Faturamento</CardDescription>
@@ -103,7 +103,7 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
                 </section>
-                <section className="flex gap-[12px]">
+                <section className="flex gap-[12px] w-full">
                     <ChartPieDonut data={dataSales.data}/>
                     <ChartBarDaily sales={dataDailySales}/>
                 </section>
