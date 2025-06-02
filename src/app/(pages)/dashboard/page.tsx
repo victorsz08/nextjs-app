@@ -1,3 +1,6 @@
+import { ChartBarDaily } from "@/components/charts/bar-chart";
+import { ChartDataType, ChartPieDonut } from "@/components/charts/pie-chart";
+import { DataDailyTable } from "@/components/data-table/data-daily-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { ChartColumnIncreasing, HandCoins, Handshake } from "lucide-react";
@@ -7,8 +10,51 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
     title: "Dashboard"
-}
+};
 
+
+const dataSales: ChartDataType = {
+    data: [
+    {
+        status: "connected",
+        quantity: 30,
+        fill: "var(--chart-1)"
+    },
+    {
+        status: "pending",
+        quantity: 15,
+        fill: "var(--chart-2)"
+    },
+    {
+        status: "cancelled",
+        quantity: 5,
+        fill: "var(--chart-3)"
+    }
+]
+};
+
+const dataDailySales = [
+    {
+        day: "01/06",
+        sales: 2
+    },
+    {
+        day: "02/06",
+        sales: 1
+    },
+    {
+        day: "03/06",
+        sales: 5
+    },
+    {
+        day: "04/06",
+        sales: 4
+    },
+    {
+        day: "05/06",
+        sales: 0
+    },
+]
 
 export default function Dashboard() {
 
@@ -56,6 +102,13 @@ export default function Dashboard() {
                         </CardTitle>
                     </CardContent>
                 </Card>
+                </section>
+                <section className="flex gap-[12px]">
+                    <ChartPieDonut data={dataSales.data}/>
+                    <ChartBarDaily sales={dataDailySales}/>
+                </section>
+                <section>
+                    <DataDailyTable/>
                 </section>
             </section>
         </section>

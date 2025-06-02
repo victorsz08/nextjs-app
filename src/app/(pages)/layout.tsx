@@ -18,7 +18,7 @@ export default function Layout({ children } : { children: React.ReactNode }) {
     const pathnames = paths.split("/").filter((path) => path !== "");
 
     return (
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={false}>
             <AppSidebar variant="sidebar" collapsible="icon"/>
             <main className="w-screen h-screen overflow-x-hidden">
                 <header className="flex justify-between items-center px-4 py-[26px] bg-transparent">
