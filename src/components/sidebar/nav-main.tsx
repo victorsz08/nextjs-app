@@ -3,7 +3,6 @@
 import { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
-  SidebarContent,
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
