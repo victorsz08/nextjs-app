@@ -75,11 +75,6 @@ export function DataOrderTable({
           <CreateOrderForm />
         </div>
       </div>
-      <span className="text-secondary-foreground text-sm mb-6">
-        {selectedOrders.length > 0
-          ? `Selecionados: ${selectedOrders.length}`
-          : "Nenhum pedido selecionado"}
-      </span>
       <section className="overflow-clip rounded-lg border border-border">
         <Table>
           <TableHeader>

@@ -3,7 +3,7 @@
 import { StatusOrderType } from "@/types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { ListFilter } from "lucide-react";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -70,8 +70,16 @@ export function FilterOrderForm() {
         </div>
       </DialogTrigger>
       <DialogContent>
+        <DialogHeader className="mb-10 flex flex-col items-center">
+          <DialogTitle>
+            Filtar pedidos
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground text-[12px]">
+            Filtre os pedidos por data de agendamento, data de criação e status.
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
-          <form className="flex flex-col gap-6">
+          <form className="flex flex-col gap-8">
             <FormField
               control={form.control}
               name="schedulingDateFilter"
@@ -102,7 +110,7 @@ export function FilterOrderForm() {
               control={form.control}
               name="status"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col gap-1 justify-center items-center">
                   <FormLabel>Filtrar por status</FormLabel>
                   <RadioGroup
                     defaultValue={field.value}
