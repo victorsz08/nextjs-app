@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { UpdateStatusOrderForm } from "../forms/update-status";
 import { DataOrderType } from "@/types";
 import { Separator } from "../ui/separator";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 
 
@@ -13,8 +14,8 @@ import { Separator } from "../ui/separator";
 export function MenuOrder({ order }: { order: DataOrderType}) {
 
     return (
-        <Popover>
-            <PopoverTrigger asChild>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
                 <div>
                 <Button
                     type="button"
@@ -25,12 +26,16 @@ export function MenuOrder({ order }: { order: DataOrderType}) {
                     <EllipsisVerticalIcon />
                   </Button>
                   </div>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="flex flex-col gap-1 p-0">
-                <div className="text-sm font-semibold text-foreground px-[10px] py-[6px]">Menu</div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="flex flex-col gap-1 p-0">
+                <DropdownMenuLabel>
+                    Menu pedido
+                </DropdownMenuLabel>
                 <Separator/>
-                <UpdateStatusOrderForm order={order}/>
-            </PopoverContent>
-        </Popover>
+                <DropdownMenuItem asChild>
+                    <UpdateStatusOrderForm order={order}/>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
