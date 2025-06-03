@@ -29,7 +29,7 @@ export function BadgeStatus({ status } : { status: StatusOrderType }) {
     else if(status === "CANCELADO") {
         StatusIcon = XCircle
         statusClasses = "bg-red-100 text-red-800";
-    } else {
+    } else if(status === "ALL") {
         statusClasses = "bg-gray-100 text-gray-800";
         StatusIcon = CheckCircle;
         statusLabelText = "Todos";

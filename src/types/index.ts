@@ -7,7 +7,7 @@ export const StatusOrderType = {
     PENDING: "PENDENTE" as const,
     CONNECTED: "CONECTADO" as const,
     CANCELED: "CANCELADO" as const,
-    ALL: "TODOS" as const,
+    ALL: "ALL" as const,
 } as const; 
 
 export type DataOrderType = {

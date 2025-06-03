@@ -12,7 +12,7 @@ import { UpdateOrderForm } from "../forms/update-order-form";
 
 
 
-export function MenuOrder({ order }: { order: DataOrderType}) {
+export function MenuOrder({ data }: { data: DataOrderType}) {
 
     return (
         <DropdownMenu>
@@ -34,13 +34,13 @@ export function MenuOrder({ order }: { order: DataOrderType}) {
                 </DropdownMenuLabel>
                 <Separator/>
                 <DropdownMenuItem asChild>
-                    <UpdateStatusOrderForm order={order}/>
+                    <UpdateStatusOrderForm data={data}/>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <UpdateSchedulingForm data={order}/>
+                    <UpdateSchedulingForm data={data}/>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <UpdateOrderForm data={order}/>
+                    <UpdateOrderForm data={data}/>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

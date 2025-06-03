@@ -1,6 +1,5 @@
 import { ChartBarDaily } from "@/components/charts/bar-chart";
 import { ChartDataType, ChartPieDonut } from "@/components/charts/pie-chart";
-import { DataDailyTable } from "@/components/data-table/data-daily-table";
 import { NotFoundOrders } from "@/components/data-table/not-found-orders";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
@@ -142,11 +141,7 @@ export default function Dashboard() {
                     <ChartBarDaily sales={dataDailySales}/>
                 </section>
                 <section>
-                    {dataDailyOrders.total === 0 ? (
-                        <NotFoundOrders/>
-                    ) : (
-                        <DataDailyTable data={dataDailyOrders}/>
-                    )}
+                   
                 </section>
             </section>
         </section>

@@ -33,11 +33,11 @@ const updateStatusOrderSchema = z.object({
 
 type UpdateStatusOrderFormData = z.infer<typeof updateStatusOrderSchema>;
 
-export function UpdateStatusOrderForm({ order }: { order: DataOrderType }) {
+export function UpdateStatusOrderForm({ data }: { data: DataOrderType }) {
   const form = useForm<UpdateStatusOrderFormData>({
     resolver: zodResolver(updateStatusOrderSchema),
     defaultValues: {
-      status: order.status,
+      status: data.status,
     },
   });
 
@@ -55,7 +55,7 @@ export function UpdateStatusOrderForm({ order }: { order: DataOrderType }) {
         <DialogHeader className="flex flex-col justify-center items-center gap-1 mb-8">
           <DialogTitle>Atualizar Status</DialogTitle>
           <DialogDescription className="text-[12px] text-primary font-light">
-            Contrato: {order.number} - Cidade: {order.local}
+            Contrato: {data.number} - Cidade: {data.local}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
