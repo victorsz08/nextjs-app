@@ -12,7 +12,7 @@ import {
 } from "../ui/form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { ComboboxDemo } from "../combobox/combobox";
+import { Combobox } from "../combobox/combobox";
 import {
   Dialog,
   DialogClose,
@@ -139,7 +139,7 @@ export function CreateOrderForm() {
                     <Label className="text-[12px] font-medium text-accent-foreground">
                       Cidade
                     </Label>
-                    <ComboboxDemo
+                    <Combobox
                       options={citiesOptions}
                       value={field.value}
                       onChange={field.onChange}

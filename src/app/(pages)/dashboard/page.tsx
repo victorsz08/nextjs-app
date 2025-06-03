@@ -3,6 +3,7 @@ import { ChartDataType, ChartPieDonut } from "@/components/charts/pie-chart";
 import { DataDailyTable } from "@/components/data-table/data-daily-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
+import { StatusOrderType } from "@/types";
 import { ChartColumnIncreasing, HandCoins, Handshake } from "lucide-react";
 import { Metadata } from "next";
 
@@ -54,7 +55,43 @@ const dataDailySales = [
         day: "05/06",
         sales: 0
     },
-]
+];
+
+
+const dataDailyOrders = {
+    orders: [
+        {
+            id: "1",
+            number: 12345,
+            local: "São Paulo",
+            schedulingDate: "2023-06-01",
+            schedulingTime: "08h as 12h",
+            contact: "John Doe",
+            price: 119.90,
+            userId: "user123",
+            status: StatusOrderType.CONNECTED,
+            createdAt: "2023-06-01T09:00:00Z",
+            updatedAt: "2023-06-01T11:00:00Z"
+        },
+        {
+            id: "2",
+            number: 12346,
+            local: "Rio de Janeiro",
+            schedulingDate: "2023-06-02",
+            schedulingTime: "12h as 15h",
+            contact: "Jane Smith",
+            price: 99.90,
+            userId: "user123",
+            status: StatusOrderType.PENDING,
+            createdAt: "2023-06-01T10:00:00Z",
+            updatedAt: "2023-06-01T12:00:00Z"
+        }
+    ],
+    pages: 1,
+    total: 2,
+    limit: 10,
+    page: 1
+}
 
 export default function Dashboard() {
 
@@ -108,7 +145,7 @@ export default function Dashboard() {
                     <ChartBarDaily sales={dataDailySales}/>
                 </section>
                 <section>
-                    <DataDailyTable/>
+                    <DataDailyTable data={dataDailyOrders}/>
                 </section>
             </section>
         </section>

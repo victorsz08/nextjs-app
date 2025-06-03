@@ -26,43 +26,28 @@ import { useState } from "react";
 import { Separator } from "../ui/separator";
 import { MenuOrder } from "../menu/menu-order";
 
-const data: DataOrderType[] = [
-  {
-    id: "1",
-    number: 12345,
-    local: "São Paulo",
-    schedulingDate: "2023-10-01",
-    schedulingTime: "10:00",
-    status: "PENDENTE",
-    contact: "John Doe",
-    userId: "user123",
-    createdAt: "2023-09-30T12:00:00Z",
-    updatedAt: "2023-09-30T12:00:00Z",
-  },
-  {
-    id: "2",
-    number: 12346,
-    local: "Rio de Janeiro",
-    schedulingDate: "2023-10-01",
-    schedulingTime: "11:00",
-    status: "CONECTADO",
-    contact: "Jane Smith",
-    userId: "user456",
-    createdAt: "2023-09-30T12:00:00Z",
-    updatedAt: "2023-09-30T12:00:00Z",
-  },
-];
 
-export function DataDailyTable() {
+
+export interface DataDailyTableProps {
+  data: {
+    orders: DataOrderType[];
+    pages: number;
+    total: number;
+    page: number;
+    limit: number;
+  };
+};
+
+export function DataDailyTable({ data } : DataDailyTableProps) {
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
 
-  const allSelected = selectedOrders.length === data.length && data.length > 0;
+  const allSelected = selectedOrders.length === data.total && data.total > 0;
 
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedOrders([]);
     } else {
-      setSelectedOrders(data.map((order) => order.id));
+      setSelectedOrders(data.orders.map((order) => order.id));
     }
   };
 
@@ -93,7 +78,7 @@ export function DataDailyTable() {
       <CardContent>
         <div className={`flex items-center ${selectedOrders.length > 0 ? "justify-between" : "justify-end"} mb-4 gap-2`}>
             {selectedOrders.length > 0 && 
-                <span className="text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-sm font-light">
                 {selectedOrders.length} {selectedOrders.length > 1 ? "itens selecionados" : "item selecionado"}
                 </span>
             }
@@ -110,9 +95,9 @@ export function DataDailyTable() {
             <CreateOrderForm />
           </div>
         </div>
-        <Table>
+        <Table className="overflow-clip border border-muted-foreground rounded-md">
           <TableHeader>
-            <TableRow className="bg-muted text-muted-foreground">
+            <TableRow className="bg-primary-foreground text-muted-foreground">
               <TableHead>
                 <Checkbox
                   checked={allSelected}
@@ -127,8 +112,8 @@ export function DataDailyTable() {
               <TableHead className="w-[70px] text-center">Ações</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {data.map((order) => (
+          <TableBody className="text-accent-foreground">
+            {data.orders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell>
                   <Checkbox
@@ -154,16 +139,19 @@ export function DataDailyTable() {
         <Separator/>
         <CardFooter className="flex items-center justify-between mt-4">
             <p className="text-muted-foreground text-sm font-light">
-                Total de {data.length} pedidos
+                Total de {data.total} pedidos
+            </p>
+            <p className="text-muted-foreground text-sm font-light">
+                Total de {data.pages} {data.pages === 1 ? "página" : "páginas"}
             </p>
             <div className="flex items-center gap-2">
-                <Button variant="ghost" className="text-muted-foreground cursor-pointer">
+                <Button variant="secondary" disabled={data.pages === 1 ? true : false} className="text-muted-foreground cursor-pointer">
                     <ChevronLeft className="w-4 h-4" />
                 </Button>
-                <Button variant="outline" className="text-muted-foreground font-semibold" disabled>
-                    1
-                </Button>
-                <Button variant="ghost" className="text-muted-foreground cursor-pointer">
+                <span className="flex items-center justify-center w-[32px] h-[32px] rounded-sm font-semibold text-muted-foreground border border-muted-foreground">
+                    {data.pages}
+                </span>
+                <Button variant="secondary" disabled={data.pages >= data.page ? true : false} className="text-muted-foreground cursor-pointer">
                     <ChevronRight className="w-4 h-4" />
                 </Button>
             </div>

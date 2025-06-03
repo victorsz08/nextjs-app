@@ -16,6 +16,7 @@ export type DataOrderType = {
     schedulingDate: string;
     schedulingTime: string;
     status: StatusOrderType;
+    price: number;
     contact: string;
     userId: string;
     createdAt: string;

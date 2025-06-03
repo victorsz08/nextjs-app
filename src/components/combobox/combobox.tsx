@@ -30,7 +30,7 @@ export interface ComboboxProps {
     options: OptionsDataType[];
 }
 
-export function ComboboxDemo({ options, value, onChange } : ComboboxProps) {
+export function Combobox({ options, value, onChange } : ComboboxProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -40,11 +40,11 @@ export function ComboboxDemo({ options, value, onChange } : ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[230px] justify-between"
+          className="min-w-[230px] w-full justify-between"
         >
           {value
-            ? options.find((option) => option.value === value)?.label
-            : "Selecione uma cidade..."}
+            ? options.find((option) => option.value === value)?.value
+            : <span className="text-accent-foreground font-light">Selecione uma cidade...</span>}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
