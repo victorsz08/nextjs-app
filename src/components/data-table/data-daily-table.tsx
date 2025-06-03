@@ -150,6 +150,7 @@ export function DataDailyTable() {
             ))}
           </TableBody>
         </Table>
+      </CardContent>
         <Separator/>
         <CardFooter className="flex items-center justify-between mt-4">
             <p className="text-muted-foreground text-sm font-light">
@@ -167,7 +168,6 @@ export function DataDailyTable() {
                 </Button>
             </div>
         </CardFooter>
-      </CardContent>
     </Card>
   );
 }
