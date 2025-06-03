@@ -1,18 +1,16 @@
 import { ChartBarDaily } from "@/components/charts/bar-chart";
 import { ChartDataType, ChartPieDonut } from "@/components/charts/pie-chart";
 import { DataDailyTable } from "@/components/data-table/data-daily-table";
+import { NotFoundOrders } from "@/components/data-table/not-found-orders";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { StatusOrderType } from "@/types";
 import { ChartColumnIncreasing, HandCoins, Handshake } from "lucide-react";
 import { Metadata } from "next";
 
-
-
 export const metadata: Metadata = {
     title: "Dashboard"
 };
-
 
 const dataSales: ChartDataType = {
     data: [
@@ -57,7 +55,6 @@ const dataDailySales = [
     },
 ];
 
-
 const dataDailyOrders = {
     orders: [
         {
@@ -91,7 +88,7 @@ const dataDailyOrders = {
     total: 2,
     limit: 10,
     page: 1
-}
+};
 
 export default function Dashboard() {
 
@@ -145,7 +142,11 @@ export default function Dashboard() {
                     <ChartBarDaily sales={dataDailySales}/>
                 </section>
                 <section>
-                    <DataDailyTable data={dataDailyOrders}/>
+                    {dataDailyOrders.total === 0 ? (
+                        <NotFoundOrders/>
+                    ) : (
+                        <DataDailyTable data={dataDailyOrders}/>
+                    )}
                 </section>
             </section>
         </section>

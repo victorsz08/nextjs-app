@@ -18,13 +18,14 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { ChevronLeft, ChevronRight, EllipsisVerticalIcon, Trash } from "lucide-react";
+import { ChevronLeft, ChevronRight, EllipsisVerticalIcon, ExternalLink, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { BadgeStatus } from "../badge/badge-status";
 import { CreateOrderForm } from "../forms/create-order-form";
 import { useState } from "react";
 import { Separator } from "../ui/separator";
 import { MenuOrder } from "../menu/menu-order";
+import Link from "next/link";
 
 
 
@@ -67,13 +68,19 @@ export function DataDailyTable({ data } : DataDailyTableProps) {
 
   return (
     <Card className="w-full shadow-none">
-      <CardHeader>
-        <CardTitle className="text-[18px] text-foreground font-bold">
+      <CardHeader className="flex items-center justify-between">
+       <div className="flex flex-col gap-0">
+         <CardTitle className="text-[18px] text-foreground font-bold">
           Pedidos Recentes
         </CardTitle>
         <CardDescription className="text-muted-foreground text-xs">
           Pedidos com agendamentos para hoje.
         </CardDescription>
+       </div>
+       <Link href="/contratos" className="text-muted-foreground underline gap-1 flex items-center text-xs font-light hover:text-foreground">
+          <span>Ver todos os pedidos</span>
+          <ExternalLink className="w-[16px] h-[16px]"/>
+       </Link>
       </CardHeader>
       <CardContent>
         <div className={`flex items-center ${selectedOrders.length > 0 ? "justify-between" : "justify-end"} mb-4 gap-2`}>

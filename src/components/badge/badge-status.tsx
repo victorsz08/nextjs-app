@@ -1,6 +1,7 @@
 "use client";
 
 import { StatusOrderType } from "@/types";
+import { stat } from "fs";
 import { CheckCircle, ClockAlert, LucideIcon, XCircle } from "lucide-react";
 
 
@@ -9,6 +10,7 @@ const statusLabel = {
     PENDENTE: "Pendente" as StatusOrderType,
     CONECTADO: "Conectado" as StatusOrderType,
     CANCELADO: "Cancelado" as StatusOrderType,
+    ALL: "Todos" as StatusOrderType,
 } as const;
 
 export function BadgeStatus({ status } : { status: StatusOrderType }) {
@@ -27,6 +29,10 @@ export function BadgeStatus({ status } : { status: StatusOrderType }) {
     else if(status === "CANCELADO") {
         StatusIcon = XCircle
         statusClasses = "bg-red-100 text-red-800";
+    } else {
+        statusClasses = "bg-gray-100 text-gray-800";
+        StatusIcon = CheckCircle;
+        statusLabelText = "Todos";
     };
 
     return (

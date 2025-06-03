@@ -1,12 +1,13 @@
 
 
 
-export type StatusOrderType = "PENDENTE" | "CONECTADO" | "CANCELADO";
+export type StatusOrderType = "PENDENTE" | "CONECTADO" | "CANCELADO" | "ALL";
 
 export const StatusOrderType = {
     PENDING: "PENDENTE" as const,
     CONNECTED: "CONECTADO" as const,
     CANCELED: "CANCELADO" as const,
+    ALL: "TODOS" as const,
 } as const; 
 
 export type DataOrderType = {

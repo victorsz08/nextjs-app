@@ -4,9 +4,7 @@ import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { TriggerSidebar } from "@/components/sidebar/trigger-sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
-import { House } from "lucide-react";
+import {  SidebarProvider } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 
 
