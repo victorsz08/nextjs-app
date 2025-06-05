@@ -36,7 +36,7 @@ const chartConfig = {
   }
 } satisfies ChartConfig;
 
-type StatusChart = "connected" | "pending" | "cancelled" | "sales"
+export type StatusChart = "connected" | "pending" | "cancelled" | "sales"
 
 export interface ChartDataType {
     data: {
