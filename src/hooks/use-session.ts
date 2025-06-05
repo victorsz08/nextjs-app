@@ -1,33 +1,28 @@
 "use client";
 
 import api from "@/lib/axios";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 
-export type SessionType = {
-   user: {
-        id: string;
-        name: string;
-        email: string;
-        role: string;
-   }
-}
 
-export const useSession = () => {
-    const [session, setSession] = useState<SessionType>();
+type Session = {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+};
 
-    const getSession = async () => {
-        const { data } = await api.get("/auth/session");
-        setSession({
-            user: data
-        });
-    };
 
-    useEffect(() => {
-      getSession()  
-    },[]);
+export function useSession(): Session {
+    const { data: session } = useQuery({
+        queryFn: async () => {
+            const res = await api.get("auth/session", { withCredentials: true });
 
-    return {
-        user: session?.user
-    }
-}
+            return res.data;
+        },
+        queryKey: ['session']
+    });
+
+    return session;
+};

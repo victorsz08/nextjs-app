@@ -6,8 +6,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import {  SidebarProvider } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
+import { QueryClient,  QueryClientProvider } from "@tanstack/react-query"
 
-
+const queryClient = new QueryClient();
 
 
 
@@ -16,6 +17,7 @@ export default function Layout({ children } : { children: React.ReactNode }) {
     const pathnames = paths.split("/").filter((path) => path !== "");
 
     return (
+        <QueryClientProvider client={queryClient}>
         <SidebarProvider defaultOpen={false}>
             <AppSidebar variant="sidebar" collapsible="icon"/>
             <main className="w-screen h-screen overflow-x-hidden">
@@ -53,5 +55,6 @@ export default function Layout({ children } : { children: React.ReactNode }) {
                 {children}
             </main>
         </SidebarProvider>
+        </QueryClientProvider>
     )
 }

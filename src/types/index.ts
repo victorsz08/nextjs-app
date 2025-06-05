@@ -1,22 +1,22 @@
 
 
 
-export type StatusOrderType = "PENDENTE" | "CONECTADO" | "CANCELADO" | "ALL";
+export type TypeStatusOrder = "PENDENTE" | "CONECTADO" | "CANCELADO" | "ALL";
 
-export const StatusOrderType = {
-    PENDING: "PENDENTE" as const,
-    CONNECTED: "CONECTADO" as const,
-    CANCELED: "CANCELADO" as const,
-    ALL: "ALL" as const,
+export const TypeStatusOrder = {
+    PENDING: "PENDENTE" as TypeStatusOrder,
+    CONNECTED: "CONECTADO" as TypeStatusOrder,
+    CANCELED: "CANCELADO" as TypeStatusOrder,
+    ALL: "ALL" as TypeStatusOrder,
 } as const; 
 
-export type DataOrderType = {
+export type TypeOrder = {
     id: string;
     number: number;
     local: string;
     schedulingDate: string;
     schedulingTime: string;
-    status: StatusOrderType;
+    status: TypeStatusOrder;
     price: number;
     contact: string;
     userId: string;
@@ -24,7 +24,15 @@ export type DataOrderType = {
     updatedAt: string;
 };
 
-
+export type TypeInsight = {
+    revenue: number;
+    sales: number;
+    completionRate: number;
+    cancelledRate: number;
+    connected: number;
+    pending: number;
+    cancelled: number;
+}
 
 export type UserRoleType = "ADMIN" | "USER";
 
