@@ -1,11 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = "https://api-node-ts-nine.vercel.app/";
+const BASE_URL = "http://localhost:8000/";
 const api = axios.create({
     baseURL: BASE_URL,
     withCredentials: true
 });
-
-api.defaults.withCredentials = true;
 
 export default api;

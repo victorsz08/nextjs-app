@@ -13,10 +13,12 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { login } from "@/services/login/login";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, UserRound } from "lucide-react";
+import { Loader, Lock, UserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -36,7 +38,26 @@ export default function LoginPage() {
     },
   });
 
-  async function onSubmit(data: LoginDataType) {}
+  async function onSubmit(data: LoginDataType) {
+    const { username, password } = data;
+    console.log(form.formState.isLoading)
+
+    const response = await login({ username, password });
+
+    if(response.status === 400) {
+      form.setError("username", {
+        type: "min",
+        message: "username ou senha incorretos",
+      });
+
+      form.setError("password", {
+        type: "min",
+        message: "username ou senha incorretos",
+      });
+    } else {
+      return redirect("/dashboard");
+    };
+  };
 
   return (
     <main className="flex h-screen w-screen">
@@ -111,8 +132,8 @@ export default function LoginPage() {
                         Recupere o acesso
                       </span>
                     </Link>
-                    <Button type="submit" className="w-full cursor-pointer">
-                      Entrar
+                    <Button type="submit" className="w-full cursor-pointer" disabled={form.formState.isLoading}>
+                      {form.formState.isLoading ? <Loader className="w-[12px] h-[12px] animate-spin repeat-infinite"/> : "Entrar"}
                     </Button>
                   </div>
                   <Separator />

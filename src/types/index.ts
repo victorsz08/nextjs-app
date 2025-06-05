@@ -23,3 +23,12 @@ export type DataOrderType = {
     createdAt: string;
     updatedAt: string;
 };
+
+
+
+export type UserRoleType = "ADMIN" | "USER";
+
+export const UserRoleType = {
+    ADMIN: "ADMIN" as UserRoleType,
+    USER: "USER" as UserRoleType,
+} as const;

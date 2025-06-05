@@ -1,15 +1,18 @@
+"use client";
+
 import { ChartBarDaily } from "@/components/charts/bar-chart";
 import { ChartDataType, ChartPieDonut } from "@/components/charts/pie-chart";
+
+
 import { NotFoundOrders } from "@/components/data-table/not-found-orders";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSession } from "@/hooks/use-session";
+import api from "@/lib/axios";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { StatusOrderType } from "@/types";
 import { ChartColumnIncreasing, HandCoins, Handshake } from "lucide-react";
 import { Metadata } from "next";
-
-export const metadata: Metadata = {
-    title: "Dashboard"
-};
+import { use } from "react";
 
 const dataSales: ChartDataType = {
     data: [
@@ -90,6 +93,8 @@ const dataDailyOrders = {
 };
 
 export default function Dashboard() {
+    const  { user } = useSession();
+    console.log(user);
 
     return (
         <section className="p-[24px]">
