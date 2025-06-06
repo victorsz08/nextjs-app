@@ -27,7 +27,7 @@ export interface OptionsDataType {
 export interface ComboboxProps {
     value?: string;
     onChange: (value: string) => void;
-    options: OptionsDataType[];
+    options?: OptionsDataType[];
 }
 
 export function Combobox({ options, value, onChange } : ComboboxProps) {
@@ -43,7 +43,7 @@ export function Combobox({ options, value, onChange } : ComboboxProps) {
           className="min-w-[230px] w-full justify-between"
         >
           {value
-            ? options.find((option) => option.value === value)?.value
+            ? options?.find((option) => option.value === value)?.value
             : <span className="text-accent-foreground font-light">Selecione uma cidade...</span>}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -54,9 +54,9 @@ export function Combobox({ options, value, onChange } : ComboboxProps) {
           <CommandList>
             <CommandEmpty>Cidade não encontrada.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => (
+              {options && options.map((option, index) => (
                 <CommandItem
-                  key={option.value}
+                  key={index}
                   value={option.value}
                   onSelect={(currentValue) => {
                     onChange(currentValue)

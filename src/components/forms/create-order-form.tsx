@@ -12,7 +12,7 @@ import {
 } from "../ui/form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Combobox } from "../combobox/combobox";
+import { Combobox, OptionsDataType } from "../combobox/combobox";
 import {
   Dialog,
   DialogClose,
@@ -30,13 +30,13 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { useSession } from "@/hooks/use-session";
 import { createOrder } from "@/services/orders/create-order";
 import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
 
-const citiesOptions = [
-  { value: "sao-paulo", label: "São Paulo" },
-  { value: "rio de janeiro", label: "Rio de Janeiro" },
-  { value: "belo-horizonte", label: "Belo Horizonte" },
-  { value: "curitiba", label: "Curitiba" },
-];
+
+type CitiesOptions = {
+  nome: string;
+  codigo: string;
+}
 
 const timeOptions = [
   {
@@ -72,6 +72,20 @@ type CreateOrderFormData = z.infer<typeof createOrderSchema>;
 
 export function CreateOrderForm() {
   const session = useSession();
+  const { data: citiesOptions } = useQuery({
+    queryKey: ["cities"],
+    queryFn: async () => {
+      const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/municipios?orderBy=nome");
+      const data: any[] = await response.json();
+
+      const cities: OptionsDataType[] = data.map(city => ({
+        value: `${city.nome} / ${city.microrregiao?.mesorregiao?.UF?.sigla}`,
+        label: `${city.nome} / ${city.microrregiao?.mesorregiao?.UF?.sigla}`,
+      }));
+
+      return cities;
+    },
+  });
 
   const form = useForm<CreateOrderFormData>({
     resolver: zodResolver(createOrderSchema),
