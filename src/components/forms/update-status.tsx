@@ -20,6 +20,9 @@ import { Label } from "../ui/label";
 import { BadgeStatus } from "../badge/badge-status";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Separator } from "../ui/separator";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/lib/axios";
+import { useState } from "react";
 
 const statusOptions = [
   { value: TypeStatusOrder.PENDING },
@@ -34,6 +37,23 @@ const updateStatusOrderSchema = z.object({
 type UpdateStatusOrderFormData = z.infer<typeof updateStatusOrderSchema>;
 
 export function UpdateStatusOrderForm({ data }: { data: TypeOrder }) {
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (newData: UpdateStatusOrderFormData) => {
+      await api.put(`/orders/status/${data.id}`, {
+        status: newData.status,
+      });
+      return
+    },
+     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] }); // Invalidate "orders" query to re-fetch data
+      setOpen(false); // Close the dialog on success
+    },
+    mutationKey: ["orders"],
+  });
+
   const form = useForm<UpdateStatusOrderFormData>({
     resolver: zodResolver(updateStatusOrderSchema),
     defaultValues: {
@@ -41,11 +61,16 @@ export function UpdateStatusOrderForm({ data }: { data: TypeOrder }) {
     },
   });
 
-  console.log(statusOptions);
+  
+  function onSubmit(data: UpdateStatusOrderFormData) {
+    mutation.mutate(data);
+    return;
+  }
 
   return (
-    <Dialog>
-      <DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen} modal>
+        <Form {...form}>
+      <DialogTrigger asChild>
         <div className="text-accent-foreground p-[10px] cursor-pointer hover:text-primary text-[12px] font-light flex items-center gap-1">
           <Pencil className="w-[14px] h-[14px]" />
           <span>Editar status</span>
@@ -58,8 +83,7 @@ export function UpdateStatusOrderForm({ data }: { data: TypeOrder }) {
             Contrato: {data.number} - Cidade: {data.local}
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="status"
@@ -83,12 +107,13 @@ export function UpdateStatusOrderForm({ data }: { data: TypeOrder }) {
                         />
                         <Label
                           htmlFor={option.value}
-                          className={`${field.value === option.value ? 
-                            "border-2 border-primary rounded-xl outline-2" : 
-                            "border-2 border-transparent"
+                          className={`${
+                            field.value === option.value
+                              ? "border-2 border-primary rounded-xl outline-2"
+                              : "border-2 border-transparent"
                           } cursor-pointer p-1 transition-all`}
                         >
-                            <BadgeStatus status={option.value} />
+                          <BadgeStatus status={option.value} />
                         </Label>
                       </div>
                     ))}
@@ -97,20 +122,24 @@ export function UpdateStatusOrderForm({ data }: { data: TypeOrder }) {
               )}
             />
             <DialogFooter className="flex flex-col w-full mt-8 gap-[10px]">
-                <div className="flex flex-col gap-1 w-full">
-                    <Button className="cursor-pointer w-full" type="submit">
-                        Atualizar
-                    </Button>
-                    <DialogClose asChild>
-                        <Button variant="outline" type="button" className="cursor-pointer w-full">
-                            Cancelar
-                        </Button>
-                    </DialogClose>
-                </div>
+              <div className="flex flex-col gap-1 w-full">
+                <Button className="cursor-pointer w-full" type="submit">
+                  {mutation.isLoading ? "Atualizando..." : "Atualizar"}
+                </Button>
+                <DialogClose asChild>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    className="cursor-pointer w-full"
+                  >
+                    Cancelar
+                  </Button>
+                </DialogClose>
+              </div>
             </DialogFooter>
           </form>
-        </Form>
       </DialogContent>
+        </Form>
     </Dialog>
   );
 }

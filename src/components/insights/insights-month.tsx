@@ -22,13 +22,13 @@ export function InsightCurrentMonth() {
     const session = useSession();
     const { data: salesPerDay, isLoading: salesLoading } = useQuery({
         queryFn: () => getSalesPerDay({ userId: session.id, dateIn, dateOut }),
-        queryKey: ['get-sales-per-day', dateIn, dateOut],
+        queryKey: ['orders', dateIn, dateOut],
         enabled: !!session
     });
 
     const { data, isLoading } = useQuery({
         queryFn: () => getInsight({ userId: session.id, dateIn, dateOut }),
-        queryKey: ['get-insights', dateIn, dateOut],
+        queryKey: ['orders-month', dateIn, dateOut],
         enabled: !!session
     });
 
@@ -59,7 +59,7 @@ export function InsightCurrentMonth() {
     const chartBarDailyData: ChartBarDataType = {
         sales: salesPerDay?.sales.map((sale) => {
             return {
-                day: format(new Date(sale.day), "dd/MM"),
+                day: sale.day,
                 sales: sale.quantity
             }
         }) ?? []
@@ -79,7 +79,7 @@ export function InsightCurrentMonth() {
                     </CardHeader>
                     <CardContent>
                         <CardTitle className="text-[24px] font-bold text-foreground">
-                            {formatCurrency(data?.revenue || 0)}
+                            {data && formatCurrency(data.revenue)}
                         </CardTitle>
                     </CardContent>
                 </Card>
@@ -92,7 +92,7 @@ export function InsightCurrentMonth() {
                     </CardHeader>
                     <CardContent>
                         <CardTitle className="text-[24px] font-bold text-foreground">
-                            {data?.sales ?? 0}
+                            {data && data.sales}
                         </CardTitle>
                     </CardContent>
                 </Card>
@@ -105,7 +105,7 @@ export function InsightCurrentMonth() {
                     </CardHeader>
                     <CardContent>
                         <CardTitle className="text-[24px] font-bold text-foreground">
-                            {formatPercentage(data?.completionRate || 0)}
+                            {data && formatPercentage(data.completionRate)}
                         </CardTitle>
                     </CardContent>
                 </Card>

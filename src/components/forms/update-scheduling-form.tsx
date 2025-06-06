@@ -21,6 +21,9 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { DatePicker } from "../date-picker/date-picker";
 import { addDays } from "date-fns";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/lib/axios";
 
 const timeOptions = [
   {
@@ -51,16 +54,39 @@ const updateSchedulingSchema = z.object({
 export type UpdateSchedulingFormData = z.infer<typeof updateSchedulingSchema>;
 
 export function UpdateSchedulingForm({ data }: { data: TypeOrder }) {
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (newData: UpdateSchedulingFormData) => {
+      await api.put(`orders/scheduling/${data.id}`, {
+        schedulingDate: newData.schedulingDate, 
+        schedulingTime: newData.schedulingTime 
+      });
+
+      return;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["orders"]});
+      setOpen(false);
+    }
+  })
+
   const form = useForm<UpdateSchedulingFormData>({
     resolver: zodResolver(updateSchedulingSchema),
     defaultValues: {
-      schedulingDate: addDays(new Date(data.schedulingDate), 1),
+      schedulingDate: new Date(data.schedulingDate),
       schedulingTime: data.schedulingTime,
     },
   });
 
+  function onSubmit(data: UpdateSchedulingFormData) {
+    mutation.mutate(data);
+    return;
+  };
+
   return (
-    <Dialog>
+    <Dialog defaultOpen={open} onOpenChange={setOpen} modal>
       <DialogTrigger>
         <div className="flex items-center gap-1 text-accent-foreground p-[10px] cursor-pointer hover:text-primary text-[12px] font-light">
           <CalendarCog className="w-[12px] h-[12px]" />
@@ -75,7 +101,7 @@ export function UpdateSchedulingForm({ data }: { data: TypeOrder }) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="schedulingDate"
@@ -128,8 +154,8 @@ export function UpdateSchedulingForm({ data }: { data: TypeOrder }) {
             />
             <DialogFooter className="flex flex-col w-full mt-8 gap-[10px]">
               <div className="flex flex-col gap-1 w-full">
-                <Button className="cursor-pointer w-full" type="submit">
-                  Atualizar
+                <Button className="cursor-pointer w-full" disabled={mutation.isLoading}>
+                  {mutation.isPending ? "Atualizando..." : "Atualizar"}
                 </Button>
                 <DialogClose asChild>
                   <Button

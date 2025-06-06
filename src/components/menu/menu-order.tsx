@@ -3,7 +3,7 @@
 import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { UpdateStatusOrderForm } from "../forms/update-status";
-import { DataOrderType } from "@/types";
+import { TypeOrder } from "@/types";
 import { Separator } from "../ui/separator";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { UpdateSchedulingForm } from "../forms/update-scheduling-form";
@@ -12,10 +12,10 @@ import { UpdateOrderForm } from "../forms/update-order-form";
 
 
 
-export function MenuOrder({ data }: { data: DataOrderType}) {
+export function MenuOrder({ data }: { data: TypeOrder}) {
 
     return (
-        <DropdownMenu>
+        <DropdownMenu modal>
             <DropdownMenuTrigger asChild>
                 <div>
                 <Button

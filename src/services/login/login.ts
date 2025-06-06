@@ -24,7 +24,6 @@ export async function login(credentials: LoginCredentialsType) {
         return response;
     } catch (error: any) {
         if(error.status === 400) {
-            console.log(error);
             return error;
         };
     };

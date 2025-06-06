@@ -105,8 +105,6 @@ export function CreateOrderForm() {
         return;
       }
 
-      console.log(data)
-
       const response = await createOrder({ 
         number: data.number,
         local: data.local,

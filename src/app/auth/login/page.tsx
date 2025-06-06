@@ -13,6 +13,7 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import api from "@/lib/axios";
 import { login } from "@/services/login/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader, Lock, UserRound } from "lucide-react";
@@ -41,7 +42,10 @@ export default function LoginPage() {
   async function onSubmit(data: LoginDataType) {
     const { username, password } = data;
 
-    const response = await login({ username, password });
+    const response = await api.post("/auth/login", {
+            username,
+            password,
+        });
 
     console.log(response);
 

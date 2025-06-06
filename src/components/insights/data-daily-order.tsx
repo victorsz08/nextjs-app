@@ -31,9 +31,9 @@ export function DataDailyOrder() {
             page,
             limit 
         }),
-        queryKey: ['get-daily-order', dateIn, dateOut, page, session],
+        queryKey: ['orders'],
         enabled: !!session,
-
+        
     });
 
     if(!data && isLoading) {
