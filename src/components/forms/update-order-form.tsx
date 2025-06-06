@@ -1,6 +1,6 @@
 "use client";
 
-import { DataOrderType } from "@/types";
+import { TypeOrder } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,7 +38,7 @@ const updateOrderSchema = z.object({
 type UpdateOrderFormValues = z.infer<typeof updateOrderSchema>;
 
 export interface UpdateOrderFormProps {
-  data: DataOrderType;
+  data: TypeOrder;
 }
 
 export function UpdateOrderForm({ data }: UpdateOrderFormProps) {
@@ -79,7 +79,7 @@ export function UpdateOrderForm({ data }: UpdateOrderFormProps) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form>
+          <form className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="number"

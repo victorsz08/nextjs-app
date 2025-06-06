@@ -49,7 +49,7 @@ export interface ChartDataType {
 export function ChartPieDonut({ data } : ChartDataType) {
   const totalSales = React.useMemo(() => {
     return data.reduce((acc, curr) => acc + curr.quantity, 0)
-  }, []);
+  }, [data]);
 
   return (
     <Card className="flex flex-col w-[450px] shadow-none">

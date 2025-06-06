@@ -1,6 +1,6 @@
 "use client";
 
-import { StatusOrderType } from "@/types";
+import { TypeStatusOrder } from "@/types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -15,10 +15,10 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { BadgeStatus } from "../badge/badge-status";
 
 const statusFilterOptions = [
-  { value: StatusOrderType.ALL },
-  { value: StatusOrderType.PENDING },
-  { value: StatusOrderType.CONNECTED },
-  { value: StatusOrderType.CANCELED },
+  { value: TypeStatusOrder.ALL },
+  { value: TypeStatusOrder.PENDING },
+  { value: TypeStatusOrder.CONNECTED },
+  { value: TypeStatusOrder.CANCELED },
 ];
 
 const filterOrderFormSchema = z.object({
@@ -28,7 +28,7 @@ const filterOrderFormSchema = z.object({
       out: z.coerce.date().optional(),
     })
     .optional(),
-  status: z.nativeEnum(StatusOrderType).optional(),
+  status: z.nativeEnum(TypeStatusOrder).optional(),
   createdDateFilter: z
     .object({
       in: z.coerce.date().optional(),
@@ -43,7 +43,7 @@ export function FilterOrderForm() {
   const form = useForm<FilterOrderFormProps>({
     resolver: zodResolver(filterOrderFormSchema),
     defaultValues: {
-      status: StatusOrderType.ALL,
+      status: TypeStatusOrder.ALL,
       createdDateFilter: {
         in: startOfMonth(new Date()),
         out: endOfMonth(new Date()),

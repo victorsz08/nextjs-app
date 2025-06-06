@@ -21,6 +21,14 @@ type Insights = {
     cancelled: number;
 };
 
+
+type SalesPerDay = {
+    sales: {
+        day: string;
+        quantity: number;
+    }[]
+}
+
 export async function getInsight(input: GetInsightInput) {
     const { 
         userId, 
@@ -41,8 +49,8 @@ export async function getSalesPerDay(input: GetInsightInput) {
         dateOut
     } = input;
 
-    const response = await api.get(`orders?userId=${userId}&dateIn=${dateIn}&dateOut=${dateOut}`);
+    const response =  await api.get(`insights/sales-per-day?userId=${userId}&dateIn=${dateIn}&dateOut=${dateOut}`);
 
-    const data: TypeOrder[] = response.data;
+    const data: SalesPerDay = response.data;
     return data;
 }

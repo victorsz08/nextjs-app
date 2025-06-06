@@ -1,9 +1,10 @@
 "use client";
 
-import { DataOrderType } from "@/types";
+import { TypeOrder } from "@/types";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -25,11 +26,15 @@ import { FilterOrderForm } from "../forms/filter-order-form";
 import { CreateOrderForm } from "../forms/create-order-form";
 
 export interface DataOrderTableType {
-  orders: DataOrderType[];
+  orders: TypeOrder[];
   total: number;
   pages: number;
   page: number;
   limit: number;
+  nextPage: () => void;
+  prevPage: () => void;
+  firstPage: () => void;
+  lastPage: () => void;
 }
 
 export function DataOrderTable({
@@ -38,6 +43,10 @@ export function DataOrderTable({
   pages,
   page,
   limit,
+  nextPage,
+  prevPage,
+  firstPage,
+  lastPage,
 }: DataOrderTableType) {
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const allSelected =
@@ -61,9 +70,8 @@ export function DataOrderTable({
 
   return (
     <div className="w-full shadow-none">
-      <div className="flex items-center justify-between mb-6">
-        <FilterOrderForm />
-        <div className="flex items-center gap-1">
+      <div className="flex items-center justify-end mb-6">
+        <div className="flex items-center justify-end gap-1">
           <Button
             variant="outline"
             disabled={selectedOrders.length === 0}
@@ -78,7 +86,7 @@ export function DataOrderTable({
       <section className="overflow-clip rounded-lg border border-border">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="text-muted-foreground bg-background">
               <TableHead>
                 <Checkbox
                   checked={allSelected}
@@ -97,67 +105,71 @@ export function DataOrderTable({
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id}>
-                <TableHead>
+              <TableRow key={order.id} className="text-slate-600 bg-white border-b border-border">
+                <TableCell>
                   <Checkbox
                     checked={selectedOrders.includes(order.id)}
                     onCheckedChange={() => handleSelectOrder(order.id)}
                   />
-                </TableHead>
-                <TableHead>{order.number}</TableHead>
-                <TableHead>{order.local}</TableHead>
-                <TableHead>{order.schedulingDate}</TableHead>
-                <TableHead>{order.schedulingTime}</TableHead>
-                <TableHead>
+                </TableCell>
+                <TableCell>{order.number}</TableCell>
+                <TableCell>{order.local}</TableCell>
+                <TableCell>{order.schedulingDate}</TableCell>
+                <TableCell>{order.schedulingTime}</TableCell>
+                <TableCell>
                   <BadgeStatus status={order.status} />
-                </TableHead>
-                <TableHead>{order.contact}</TableHead>
-                <TableHead>R$ {order.price.toFixed(2)}</TableHead>
-                <TableHead className="text-center">
+                </TableCell>
+                <TableCell>{order.contact}</TableCell>
+                <TableCell>R$ {order.price.toFixed(2)}</TableCell>
+                <TableCell className="text-center">
                   <MenuOrder data={order} />
-                </TableHead>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
         <div className="w-full bg-background">
           <div className="flex w-full items-center justify-between p-4 font-semibold">
-            <span className="text-[14px] text-muted-foreground">
+            <span className="text-[14px] text-accent-foreground">
               Total de {total} pedidos
             </span>
-            <span className="text-[14px] text-secondary-foreground">
+            <span className="text-[14px] text-accent-foreground">
               Exibindo {limit} pedidos por página
             </span>
             <div className="flex items-center justify-end">
-              <span className="text-[14px] text-secondary-foreground">
+              <span className="text-[14px] text-accent-foreground">
                 Página {page} de {pages}
               </span>
               <div className="flex items-center gap-2 ml-4">
                 <Button
                   variant={"secondary"}
                   disabled={page === 1}
-                  onClick={() => console.log("Previous Page")}
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={"secondary"}
-                  disabled={page === 1}
-                  onClick={() => console.log("Previous Page")}
+                  onClick={firstPage}
+                  className="cursor-pointer"
                 >
                   <ChevronsLeft className="w-4 h-4" />
                 </Button>
                 <Button
                   variant={"secondary"}
+                  disabled={page === 1}
+                  onClick={prevPage}
+                  className="cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={"secondary"}
                   disabled={page >= pages}
-                  onClick={() => console.log("Next Page")}
+                  onClick={nextPage}
+                  className="cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>
                 <Button
                   variant={"secondary"}
                   disabled={page >= pages}
-                  onClick={() => console.log("Next Page")}
+                  onClick={lastPage}
+                  className="cursor-pointer"
                 >
                   <ChevronsRight className="w-4 h-4" />
                 </Button>

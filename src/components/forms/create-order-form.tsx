@@ -27,6 +27,9 @@ import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { DatePicker } from "../date-picker/date-picker";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { useSession } from "@/hooks/use-session";
+import { createOrder } from "@/services/orders/create-order";
+import { format } from "date-fns";
 
 const citiesOptions = [
   { value: "sao-paulo", label: "São Paulo" },
@@ -68,6 +71,8 @@ const createOrderSchema = z.object({
 type CreateOrderFormData = z.infer<typeof createOrderSchema>;
 
 export function CreateOrderForm() {
+  const session = useSession();
+
   const form = useForm<CreateOrderFormData>({
     resolver: zodResolver(createOrderSchema),
     defaultValues: {
@@ -81,17 +86,39 @@ export function CreateOrderForm() {
   });
 
   async function onSubmit(data: CreateOrderFormData) {
-    console.log("Form submitted with data:", data);
+    const userId = session.id;  
+      if(!userId) {
+        return;
+      }
+
+      console.log(data)
+
+      const response = await createOrder({ 
+        number: data.number,
+        local: data.local,
+        contact: data.contact,
+        price: data.price,
+        schedulingDate: data.schedulingDate,
+        schedulingTime: data.schedulingTime,
+        userId,
+      });
+
+      if(response.status === 201) {
+        form.reset();
+        return;
+      } else {
+        alert("Erro ao criar pedido");
+        console.log(response);
+      }
   }
 
   const formatPrice = (value: string) => {
-    const parsedValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
+    const parsedValue = value.replace(/[^0-9.-]+/g, "");
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
-      minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(parsedValue / 100);
+    }).format(Number(parsedValue) / 100);
   };
 
   const price = form.watch("price") ? formatPrice(form.watch("price")) : "";
@@ -156,7 +183,13 @@ export function CreateOrderForm() {
                     <Label className="text-[12px] font-medium text-accent-foreground">
                       Valor
                     </Label>
-                    <Input value={price} onChange={field.onChange} />
+                    <Input
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/\D/g, "");
+                        field.onChange(rawValue);
+                      }}
+                      value={formatPrice(field.value || "")}
+                    />
                     <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}

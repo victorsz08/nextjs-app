@@ -1,6 +1,6 @@
 "use client";
 
-import { DataOrderType } from "@/types";
+import { TypeOrder } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -50,7 +50,7 @@ const updateSchedulingSchema = z.object({
 
 export type UpdateSchedulingFormData = z.infer<typeof updateSchedulingSchema>;
 
-export function UpdateSchedulingForm({ data }: { data: DataOrderType }) {
+export function UpdateSchedulingForm({ data }: { data: TypeOrder }) {
   const form = useForm<UpdateSchedulingFormData>({
     resolver: zodResolver(updateSchedulingSchema),
     defaultValues: {

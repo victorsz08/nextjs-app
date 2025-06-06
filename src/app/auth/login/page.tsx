@@ -40,9 +40,10 @@ export default function LoginPage() {
 
   async function onSubmit(data: LoginDataType) {
     const { username, password } = data;
-    console.log(form.formState.isLoading)
 
     const response = await login({ username, password });
+
+    console.log(response);
 
     if(response.status === 400) {
       form.setError("username", {
@@ -54,8 +55,12 @@ export default function LoginPage() {
         type: "min",
         message: "username ou senha incorretos",
       });
-    } else {
-      return redirect("/dashboard");
+
+      return
+    };
+
+    if(response.status === 204) {
+      return redirect("/");
     };
   };
 
@@ -132,8 +137,8 @@ export default function LoginPage() {
                         Recupere o acesso
                       </span>
                     </Link>
-                    <Button type="submit" className="w-full cursor-pointer" disabled={form.formState.isLoading}>
-                      {form.formState.isLoading ? <Loader className="w-[12px] h-[12px] animate-spin repeat-infinite"/> : "Entrar"}
+                    <Button type="submit" className="w-full cursor-pointer" disabled={form.formState.isSubmitting}>
+                      {form.formState.isSubmitting ? <Loader className="w-[12px] h-[12px] animate-spin repeat-infinite"/> : "Entrar"}
                     </Button>
                   </div>
                   <Separator />

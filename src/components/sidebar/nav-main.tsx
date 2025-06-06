@@ -30,6 +30,7 @@ export function NavMain({ items }: NavMainProps) {
             <Link href={item.href}>
               <SidebarMenuItem>
                 <SidebarMenuButton
+                  tooltip={item.title}
                   isActive={pathname === item.href}
                   className="data-[active=true]:text-primary bg-transparent data-[active=true]:bg-transparent
                                 text-accent-foreground cursor-pointer py-[18px] font-light hover:bg-transparent hover:text-primary"

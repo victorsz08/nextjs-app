@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { formatCurrency, formatPercentage } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { getInsight, getSalesPerDay } from "@/services/insights/get-insight";
-import { startOfMonth } from "date-fns";
+import { format, startOfMonth } from "date-fns";
 import { useSession } from "@/hooks/use-session";
 
 
@@ -20,14 +20,19 @@ const dateOut = currentDate.toISOString();
 
 export function InsightCurrentMonth() {
     const session = useSession();
-    
-    const { data, isLoading } = useQuery({
-        queryFn: () => getInsight({ userId: session.id, dateIn, dateOut }),
-        queryKey: ['get-insights'],
+    const { data: salesPerDay, isLoading: salesLoading } = useQuery({
+        queryFn: () => getSalesPerDay({ userId: session.id, dateIn, dateOut }),
+        queryKey: ['get-sales-per-day', dateIn, dateOut],
         enabled: !!session
     });
 
-    if(!data && isLoading) {
+    const { data, isLoading } = useQuery({
+        queryFn: () => getInsight({ userId: session.id, dateIn, dateOut }),
+        queryKey: ['get-insights', dateIn, dateOut],
+        enabled: !!session
+    });
+
+    if(!data && isLoading && !salesPerDay && salesLoading) {
         return <p>Carregando...</p>
     };
 
@@ -49,7 +54,16 @@ export function InsightCurrentMonth() {
                 fill: "var(--chart-3)"
             },
         ]
-    }
+    };
+
+    const chartBarDailyData: ChartBarDataType = {
+        sales: salesPerDay?.sales.map((sale) => {
+            return {
+                day: format(new Date(sale.day), "dd/MM"),
+                sales: sale.quantity
+            }
+        }) ?? []
+    };
 
 
     return (
@@ -96,8 +110,9 @@ export function InsightCurrentMonth() {
                     </CardContent>
                 </Card>
                 </section>
-                <section>
+                <section className="flex flex-row gap-[14px]">
                     <ChartPieDonut data={chartBarData.data} />
+                    <ChartBarDaily sales={chartBarDailyData.sales} />
                 </section>
             </section>
     )

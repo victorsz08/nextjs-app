@@ -16,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
+        suppressHydrationWarning={true}
         className={`${inter.className} bg-background antialiased`}
       >
         {children}

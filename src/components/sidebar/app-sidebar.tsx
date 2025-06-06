@@ -66,6 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuItem>
               <Link href="/perfil">
                 <SidebarMenuButton
+                  tooltip={"Perfil"}
                   className="data-[active=true]:text-primary bg-transparent data-[active=true]:bg-transparent
                 text-accent-foreground cursor-pointer py-[24px] font-light hover:bg-transparent hover:text-primary"
                 >
@@ -81,6 +82,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuItem>
               <Link href="/perfil">
                 <SidebarMenuButton
+                tooltip={"Sair"}
                   className="cursor-pointer hover:bg-red-100 hover:text-red-600
                 bg-red-100 text-red-600"
                 >

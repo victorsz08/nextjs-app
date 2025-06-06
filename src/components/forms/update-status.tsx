@@ -1,4 +1,4 @@
-import { DataOrderType } from "@/types";
+import { TypeOrder } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,16 +15,16 @@ import { Button } from "../ui/button";
 import { Pencil, Radio } from "lucide-react";
 import { Form, FormField, FormItem, FormLabel } from "../ui/form";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { StatusOrderType } from "@/types/index";
+import { TypeStatusOrder } from "@/types/index";
 import { Label } from "../ui/label";
 import { BadgeStatus } from "../badge/badge-status";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Separator } from "../ui/separator";
 
 const statusOptions = [
-  { value: StatusOrderType.PENDING },
-  { value: StatusOrderType.CONNECTED },
-  { value: StatusOrderType.CANCELED },
+  { value: TypeStatusOrder.PENDING },
+  { value: TypeStatusOrder.CONNECTED },
+  { value: TypeStatusOrder.CANCELED },
 ];
 
 const updateStatusOrderSchema = z.object({
@@ -33,7 +33,7 @@ const updateStatusOrderSchema = z.object({
 
 type UpdateStatusOrderFormData = z.infer<typeof updateStatusOrderSchema>;
 
-export function UpdateStatusOrderForm({ data }: { data: DataOrderType }) {
+export function UpdateStatusOrderForm({ data }: { data: TypeOrder }) {
   const form = useForm<UpdateStatusOrderFormData>({
     resolver: zodResolver(updateStatusOrderSchema),
     defaultValues: {
