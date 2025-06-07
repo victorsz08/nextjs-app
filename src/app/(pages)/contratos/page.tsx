@@ -1,5 +1,5 @@
 import { DataOrderTable } from "@/components/data-table/data-order-table";
-import { OrderTable } from "@/components/data-table/data-orders-table";
+import { OrderTable } from "@/components/data-table/orders";
 import {
   Card,
   CardContent,

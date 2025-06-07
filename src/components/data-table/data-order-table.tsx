@@ -1,6 +1,6 @@
 "use client";
 
-import { TypeOrder } from "@/types";
+import { TypeOrder, TypeStatusOrder } from "@/types";
 import {
   Table,
   TableBody,
@@ -21,9 +21,11 @@ import {
   Trash,
 } from "lucide-react";
 import { useState } from "react";
-import { Card, CardHeader } from "../ui/card";
-import { FilterOrderForm } from "../forms/filter-order-form";
 import { CreateOrderForm } from "../forms/create-order-form";
+import { DateRange } from "react-day-picker";
+import { StatusFilter } from "../menu/status-filter";
+import { SchedulingDateFilter } from "../menu/scheduling-date-filter";
+import { CreatedDateFilter } from "../menu/created-date-filter";
 
 export interface DataOrderTableType {
   orders: TypeOrder[];
@@ -31,10 +33,14 @@ export interface DataOrderTableType {
   pages: number;
   page: number;
   limit: number;
-  nextPage: () => void;
-  prevPage: () => void;
-  firstPage: () => void;
-  lastPage: () => void;
+  setPage: (page: number) => void;
+  setLimit: (limit: number) => void;
+  status?: TypeStatusOrder;
+  setStatus: (status: TypeStatusOrder) => void;
+  schedulingDateFilter?: DateRange;
+  setSchedulingDateFilter: (date?: DateRange) => void;
+  createdDateFilter?: DateRange;
+  setCreatedDateFilter: (date?: DateRange) => void;
 }
 
 export function DataOrderTable({
@@ -43,10 +49,14 @@ export function DataOrderTable({
   pages,
   page,
   limit,
-  nextPage,
-  prevPage,
-  firstPage,
-  lastPage,
+  setPage,
+  setLimit,
+  status,
+  setStatus,
+  schedulingDateFilter,
+  setSchedulingDateFilter,
+  createdDateFilter,
+  setCreatedDateFilter,
 }: DataOrderTableType) {
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const allSelected =
@@ -68,9 +78,15 @@ export function DataOrderTable({
     }
   };
 
+
   return (
     <div className="w-full shadow-none">
-      <div className="flex items-center justify-end mb-6">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <StatusFilter status={status} setFilter={setStatus}/>
+          <SchedulingDateFilter schedulingDateFilter={schedulingDateFilter} setFilter={setSchedulingDateFilter}/>
+          <CreatedDateFilter createdDateFilter={createdDateFilter} setFilter={setCreatedDateFilter}/>
+        </div>
         <div className="flex items-center justify-end gap-1">
           <Button
             variant="outline"
@@ -144,7 +160,7 @@ export function DataOrderTable({
                 <Button
                   variant={"secondary"}
                   disabled={page === 1}
-                  onClick={firstPage}
+                  onClick={() => setPage(1)}
                   className="cursor-pointer"
                 >
                   <ChevronsLeft className="w-4 h-4" />
@@ -152,7 +168,7 @@ export function DataOrderTable({
                 <Button
                   variant={"secondary"}
                   disabled={page === 1}
-                  onClick={prevPage}
+                  onClick={() => setPage(page - 1)}
                   className="cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -160,7 +176,7 @@ export function DataOrderTable({
                 <Button
                   variant={"secondary"}
                   disabled={page >= pages}
-                  onClick={nextPage}
+                  onClick={() => setPage(page + 1)}
                   className="cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -168,7 +184,7 @@ export function DataOrderTable({
                 <Button
                   variant={"secondary"}
                   disabled={page >= pages}
-                  onClick={lastPage}
+                  onClick={() => setPage(pages)}
                   className="cursor-pointer"
                 >
                   <ChevronsRight className="w-4 h-4" />
