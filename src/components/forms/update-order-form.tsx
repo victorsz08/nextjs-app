@@ -20,19 +20,16 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Combobox } from "../combobox/combobox";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateOrder } from "@/services/orders/update-order";
 
-const citiesOptions = [
-  { value: "sao-paulo", label: "São Paulo" },
-  { value: "rio de janeiro", label: "Rio de Janeiro" },
-  { value: "belo-horizonte", label: "Belo Horizonte" },
-  { value: "curitiba", label: "Curitiba" },
-];
 
 const updateOrderSchema = z.object({
   number: z.coerce.number().min(1, "Número do pedido é obrigatório"),
   local: z.string().min(1, "Local é obrigatório"),
   contact: z.string().min(1, "Contato é obrigatório"),
-  price: z.coerce.number().min(0, "Preço deve ser um número positivo"),
+  price: z.string().min(0, "Preço deve ser um número positivo"),
 });
 
 type UpdateOrderFormValues = z.infer<typeof updateOrderSchema>;
@@ -42,29 +39,52 @@ export interface UpdateOrderFormProps {
 }
 
 export function UpdateOrderForm({ data }: UpdateOrderFormProps) {
+  const [open, setOpen] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (newData: UpdateOrderFormValues) => {
+      await updateOrder({ ...newData, id: data.id });
+      return;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      setOpen(false);
+    },
+    mutationKey: ["orders"],
+  });
+
+  const citiesOptions = queryClient.getQueryCache().find("cities");
+
   const form = useForm<UpdateOrderFormValues>({
     resolver: zodResolver(updateOrderSchema),
     defaultValues: {
       number: data.number,
       local: data.local,
       contact: data.contact,
-      price: data.price,
+      price: data.price.toString(),
     },
   });
 
-  const formatPrice = (value: number) => {
+  const formatPrice = (value: string) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(value);
+    }).format(Number((value)) / 100);
   };
 
   const price = form.watch("price") ? formatPrice(form.watch("price")) : "";
 
+
+  function onSubmit(data: UpdateOrderFormValues) {
+    mutate(data);
+  };
+
+
   return (
-    <Dialog>
+    <Dialog defaultOpen={open} onOpenChange={setOpen} modal>
       <DialogTrigger>
         <div className="flex items-center gap-1 text-accent-foreground p-[10px] cursor-pointer hover:text-primary text-[12px] font-light">
           <Settings className="w-[12px] h-[12px]" />
@@ -79,7 +99,7 @@ export function UpdateOrderForm({ data }: UpdateOrderFormProps) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="number"
@@ -138,8 +158,8 @@ export function UpdateOrderForm({ data }: UpdateOrderFormProps) {
             />
             <DialogFooter className="flex flex-col w-full mt-8 gap-[10px]">
               <div className="flex flex-col gap-1 w-full">
-                <Button className="cursor-pointer w-full" type="submit">
-                  Atualizar
+                <Button className="cursor-pointer w-full" type="submit" disabled={isPending}>
+                  {isPending ? "Atualizando..." : "Atualizar"}
                 </Button>
                 <DialogClose asChild>
                   <Button

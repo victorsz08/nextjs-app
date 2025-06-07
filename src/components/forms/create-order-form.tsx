@@ -30,7 +30,8 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { useSession } from "@/hooks/use-session";
 import { createOrder } from "@/services/orders/create-order";
 import { format } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getCities } from "@/services/cities/get-cities";
 
 
 type CitiesOptions = {
@@ -72,19 +73,23 @@ type CreateOrderFormData = z.infer<typeof createOrderSchema>;
 
 export function CreateOrderForm() {
   const session = useSession();
+  const queryCLient = useQueryClient();
+
   const { data: citiesOptions } = useQuery({
     queryKey: ["cities"],
-    queryFn: async () => {
-      const response = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/municipios?orderBy=nome");
-      const data: any[] = await response.json();
+    queryFn: getCities,
+  });
 
-      const cities: OptionsDataType[] = data.map(city => ({
-        value: `${city.nome} / ${city.microrregiao?.mesorregiao?.UF?.sigla}`,
-        label: `${city.nome} / ${city.microrregiao?.mesorregiao?.UF?.sigla}`,
-      }));
-
-      return cities;
+  const { mutate } = useMutation({
+    mutationFn: async (newData: CreateOrderFormData) => {
+      await createOrder({ ...newData, userId: session.id });
+      return;
     },
+    onSuccess: () => {
+      queryCLient.invalidateQueries({ queryKey: ["orders"] });
+      form.reset();
+    },
+    mutationKey: ["orders"],
   });
 
   const form = useForm<CreateOrderFormData>({
@@ -99,30 +104,9 @@ export function CreateOrderForm() {
     },
   });
 
-  async function onSubmit(data: CreateOrderFormData) {
-    const userId = session.id;  
-      if(!userId) {
-        return;
-      }
-
-      const response = await createOrder({ 
-        number: data.number,
-        local: data.local,
-        contact: data.contact,
-        price: data.price,
-        schedulingDate: data.schedulingDate,
-        schedulingTime: data.schedulingTime,
-        userId,
-      });
-
-      if(response.status === 201) {
-        form.reset();
-        return;
-      } else {
-        alert("Erro ao criar pedido");
-        console.log(response);
-      }
-  }
+  function onSubmit(data: CreateOrderFormData) {
+    mutate(data);
+  };
 
   const formatPrice = (value: string) => {
     const parsedValue = value.replace(/[^0-9.-]+/g, "");
