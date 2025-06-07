@@ -54,7 +54,7 @@ export function UpdateOrderForm({ data }: UpdateOrderFormProps) {
     mutationKey: ["orders"],
   });
 
-  const citiesOptions = queryClient.getQueryCache().find("cities");
+  const citiesOptions = queryClient.getQueryData<any[]>(["cities"]);
 
   const form = useForm<UpdateOrderFormValues>({
     resolver: zodResolver(updateOrderSchema),
